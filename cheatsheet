@@ -1,0 +1,4 @@
+Commit cheatsheet
+
+<type>[optional scope]: <description>
+types fix:, feat:, build:, chore:, ci:, docs:, style:, refactor:, perf:, test:, and others.
