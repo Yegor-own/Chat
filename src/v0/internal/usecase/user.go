@@ -1,12 +1,25 @@
 package usecase
 
-import "github.com/Yegor-own/Chat/internal/domain/model"
+import (
+	"github.com/Yegor-own/Chat/src/v0/internal/domain/model"
+	"github.com/Yegor-own/Chat/src/v0/internal/repository"
+)
 
 type UserUsecase interface {
 	NewUser(name, password string) (*model.User, error)
 	GetUser(name string) (*model.User, error)
 	UpdateUser(user *model.User) (*model.User, error)
-	DeleteUser(user *model.User) error
+	RemoveUser(user *model.User) error
+}
+
+type userUsecase struct {
+	repository repository.UserRepository
+}
+
+func NewUserUsecase(repo repository.UserRepository) UserUsecase {
+	return userUsecase{
+		repository: repo,
+	}
 }
 
 //func NewUser(name, password string) *model.User {

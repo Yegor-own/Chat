@@ -1,0 +1,7 @@
+host: "loacalhost"
+user: "root"
+password: "secret"
+dbname: "db"
+port: "1135"
+sslmode: "disable"
+TimeZone: "Asia/Yekaterinburg"

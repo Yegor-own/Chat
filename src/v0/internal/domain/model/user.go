@@ -8,6 +8,7 @@ type User struct {
 	Password  string     `json:"password"`
 	LastSeen  *time.Time `json:"last_seen,omitempty"`
 	AvatarUrl *string    `json:"avatar_url,omitempty"`
+	Chats     []Chat     `json:"chat_ids" gorm:"many2many:user_chats;"`
 }
 
 func (User) TableName() string { return "users" }
