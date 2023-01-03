@@ -1,7 +1,6 @@
 package presenters
 
 import (
-	"github.com/Yegor-own/Chat/src/v1/pkg/entities"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -13,7 +12,7 @@ func UserBadResponse(err error) *fiber.Map {
 	}
 }
 
-func UserSuccessRequest(data *entities.User) *fiber.Map {
+func UserSuccessRequest(data interface{}) *fiber.Map {
 	return &fiber.Map{
 		"status": true,
 		"data":   data,

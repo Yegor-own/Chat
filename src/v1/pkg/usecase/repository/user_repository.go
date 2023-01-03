@@ -25,7 +25,7 @@ func (r *repository) CreateUser(name, password string) (*entities.User, error) {
 		Name: name, Password: password,
 	}
 	res := r.db.Create(&user)
-	if res.Error != nil || user.ID <= 0 {
+	if res.Error != nil {
 		return nil, errors.New("failed to create user")
 	}
 	return &user, nil

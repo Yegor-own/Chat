@@ -10,7 +10,7 @@ import (
 
 func GetUser(service service.UserService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var userId interfaces.GetUser
+		var userId interfaces.IdUser
 		err := ctx.BodyParser(&userId)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
@@ -23,5 +23,67 @@ func GetUser(service service.UserService) fiber.Handler {
 		}
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenters.UserSuccessRequest(res))
+	}
+}
+
+func CreateUser(service service.UserService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		var userData interfaces.CreateUser
+		err := ctx.BodyParser(&userData)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		res, err := service.InsertUser(userData.Name, userData.Password)
+		if err != nil {
+			ctx.Status(http.StatusInternalServerError)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		ctx.Status(http.StatusOK)
+		return ctx.JSON(presenters.UserSuccessRequest(res))
+	}
+}
+
+func UpdateUser(service service.UserService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		var userData interfaces.UpdateUser
+		err := ctx.BodyParser(&userData)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		u, err := service.GetUser(userData.ID)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		u.ID = userData.ID
+		interfaces.MixModels(u, userData)
+
+		res, err := service.UpdateUser(u)
+		if err != nil {
+			ctx.Status(http.StatusInternalServerError)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		ctx.Status(http.StatusOK)
+		return ctx.JSON(presenters.UserSuccessRequest(res))
+	}
+}
+
+func DeleteUser(service service.UserService) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		var userId interfaces.IdUser
+		err := ctx.BodyParser(&userId)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		err = service.RemoveUser(userId.Id)
+		if err != nil {
+			ctx.Status(http.StatusInternalServerError)
+			return ctx.JSON(presenters.UserBadResponse(err))
+		}
+		ctx.Status(http.StatusOK)
+		return ctx.JSON(presenters.UserSuccessRequest("Deleted user"))
 	}
 }
