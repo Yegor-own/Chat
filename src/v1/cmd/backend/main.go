@@ -17,12 +17,23 @@ func main() {
 		log.Fatalln(err)
 	}
 	log.Println("Database connection success")
+
 	userRepo := repository.NewUserRepository(db)
 	userService := service.NewUserService(userRepo)
+
+	chatRepo := repository.NewChatRepository(db)
+	chatService := service.NewChatService(chatRepo)
+
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Use(logger.New())
+
 	api := app.Group("/api/v1")
-	routes.UserRouter(api, userService)
+	userGroup := api.Group("/user")
+	chatGroup := api.Group("/chat")
+
+	routes.UserRouter(userGroup, userService)
+	routes.ChatRouter(chatGroup, chatService)
+
 	log.Fatal(app.Listen(":8080"))
 }

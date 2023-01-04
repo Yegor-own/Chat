@@ -7,8 +7,8 @@ import (
 )
 
 func UserRouter(app fiber.Router, service service.UserService) {
-	app.Get("/user", controllers.GetUser(service))
-	app.Post("/user", controllers.CreateUser(service))
-	app.Put("/user", controllers.UpdateUser(service))
-	app.Delete("/user", controllers.DeleteUser(service))
+	app.Get("/", controllers.GetUser(service))
+	app.Post("/", controllers.CreateUser(service))
+	app.Put("/", controllers.UpdateUser(service))
+	app.Delete("/", controllers.DeleteUser(service))
 }

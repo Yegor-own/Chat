@@ -8,82 +8,84 @@ import (
 	"net/http"
 )
 
-func GetUser(service service.UserService) fiber.Handler {
+func GetChat(service service.ChatService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var userId interfaces.IdUser
-		err := ctx.BodyParser(&userId)
+		var chatId interfaces.IdChat
+		err := ctx.BodyParser(&chatId)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
-		res, err := service.GetUser(userId.Id)
+
+		res, err := service.GetChat(chatId.Id)
 		if err != nil {
-			ctx.Status(http.StatusInternalServerError)
+			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenters.SuccessRequest(res))
 	}
 }
 
-func CreateUser(service service.UserService) fiber.Handler {
+func CreateChat(service service.ChatService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var userData interfaces.CreateUser
-		err := ctx.BodyParser(&userData)
+		var chatData interfaces.CreateChat
+		err := ctx.BodyParser(&chatData)
+
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
-		res, err := service.InsertUser(userData.Name, userData.Password)
+
+		res, err := service.InsertChat(chatData.Title)
 		if err != nil {
-			ctx.Status(http.StatusInternalServerError)
+			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenters.SuccessRequest(res))
 	}
 }
 
-func UpdateUser(service service.UserService) fiber.Handler {
+func UpdateChat(service service.ChatService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var userData interfaces.UpdateUser
-		err := ctx.BodyParser(&userData)
-		if err != nil {
-			ctx.Status(http.StatusBadRequest)
-			return ctx.JSON(presenters.BadResponse(err))
-		}
-		u, err := service.GetUser(userData.ID)
-		if err != nil {
-			ctx.Status(http.StatusBadRequest)
-			return ctx.JSON(presenters.BadResponse(err))
-		}
-		u.ID = userData.ID
-		interfaces.MixModels(u, userData)
+		var chatData interfaces.UpdateChat
+		err := ctx.BodyParser(&chatData)
 
-		res, err := service.UpdateUser(u)
 		if err != nil {
-			ctx.Status(http.StatusInternalServerError)
+			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
+		res, err := service.UpdateChat(chatData.Id, chatData.Title)
+		if err != nil {
+			ctx.Status(http.StatusBadRequest)
+			return ctx.JSON(presenters.BadResponse(err))
+		}
+
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenters.SuccessRequest(res))
 	}
 }
 
-func DeleteUser(service service.UserService) fiber.Handler {
+func DeleteChat(service service.ChatService) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		var userId interfaces.IdUser
-		err := ctx.BodyParser(&userId)
+		var chatId interfaces.IdChat
+		err := ctx.BodyParser(&chatId)
 		if err != nil {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
-		err = service.RemoveUser(userId.Id)
+
+		err = service.RemoveChat(chatId.Id)
 		if err != nil {
-			ctx.Status(http.StatusInternalServerError)
+			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
 		ctx.Status(http.StatusOK)
-		return ctx.JSON(presenters.SuccessRequest("Deleted user"))
+		return ctx.JSON(presenters.SuccessRequest("Deleted chat"))
 	}
 }

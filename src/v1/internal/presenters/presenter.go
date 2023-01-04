@@ -4,7 +4,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func UserBadResponse(err error) *fiber.Map {
+func BadResponse(err error) *fiber.Map {
 	return &fiber.Map{
 		"status": false,
 		"data":   "",
@@ -12,7 +12,7 @@ func UserBadResponse(err error) *fiber.Map {
 	}
 }
 
-func UserSuccessRequest(data interface{}) *fiber.Map {
+func SuccessRequest(data interface{}) *fiber.Map {
 	return &fiber.Map{
 		"status": true,
 		"data":   data,
