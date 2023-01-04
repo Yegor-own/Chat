@@ -15,12 +15,12 @@ type UserRepository interface {
 }
 
 func NewUserRepository(db *gorm.DB) UserRepository {
-	return &repository{
+	return &userRepository{
 		db: db,
 	}
 }
 
-func (r *repository) CreateUser(name, password string) (*entities.User, error) {
+func (r *userRepository) CreateUser(name, password string) (*entities.User, error) {
 	user := entities.User{
 		Name: name, Password: password,
 	}
@@ -31,20 +31,32 @@ func (r *repository) CreateUser(name, password string) (*entities.User, error) {
 	return &user, nil
 }
 
-func (r *repository) ReadUser(id uint) (*entities.User, error) {
+func (r *userRepository) ReadUser(id uint) (*entities.User, error) {
 	user := entities.User{ID: id}
-	r.db.First(&user)
+	res := r.db.First(&user)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
 	if reflect.ValueOf(user.Name).IsZero() {
 		return nil, errors.New("failed to read user")
 	}
+
 	return &user, nil
 }
-func (r *repository) UpdateUser(user *entities.User) (*entities.User, error) {
-	r.db.Save(user)
+func (r *userRepository) UpdateUser(user *entities.User) (*entities.User, error) {
+	res := r.db.Save(user)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+
 	return user, nil
 }
-func (r *repository) DeleteUser(id uint) error {
+func (r *userRepository) DeleteUser(id uint) error {
 	user := entities.User{ID: id}
-	r.db.Delete(&user)
-	return nil
+	res := r.db.Delete(&user)
+
+	return res.Error
 }
