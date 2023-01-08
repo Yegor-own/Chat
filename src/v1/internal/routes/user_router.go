@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func UserRouter(app fiber.Router, service service.UserService) {
+func UserRouter(app fiber.Router, service service.UserService, relationship service.RelationshipService) {
 	app.Get("/", controllers.GetUser(service))
 	app.Post("/", controllers.CreateUser(service))
 	app.Put("/", controllers.UpdateUser(service))

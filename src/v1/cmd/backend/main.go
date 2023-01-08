@@ -24,6 +24,9 @@ func main() {
 	chatRepo := repository.NewChatRepository(db)
 	chatService := service.NewChatService(chatRepo)
 
+	relationshipRepo := repository.NewRelationshipRepositorySQL(db)
+	relationshipService := service.NewRelationshipService(relationshipRepo)
+
 	app := fiber.New()
 	app.Use(cors.New())
 	app.Use(logger.New())
@@ -32,8 +35,8 @@ func main() {
 	userGroup := api.Group("/user")
 	chatGroup := api.Group("/chat")
 
-	routes.UserRouter(userGroup, userService)
-	routes.ChatRouter(chatGroup, chatService)
+	routes.UserRouter(userGroup, userService, relationshipService)
+	routes.ChatRouter(chatGroup, chatService, relationshipService)
 
 	log.Fatal(app.Listen(":8080"))
 }

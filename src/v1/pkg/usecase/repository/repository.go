@@ -14,6 +14,6 @@ type relationshipRepository struct {
 	db *gorm.DB
 }
 
-type messagesRepository struct {
+type messageRepository struct {
 	db *gorm.DB
 }

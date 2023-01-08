@@ -6,7 +6,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-func ChatRouter(app fiber.Router, service service.ChatService) {
+func ChatRouter(app fiber.Router, service service.ChatService, relationship service.RelationshipService) {
 	app.Get("/", controllers.GetChat(service))
 	app.Post("/", controllers.CreateChat(service))
 	app.Put("/", controllers.UpdateChat(service))
