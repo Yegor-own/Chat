@@ -16,11 +16,13 @@ func GetUser(service service.UserService) fiber.Handler {
 			ctx.Status(http.StatusBadRequest)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
 		res, err := service.GetUser(userId.Id)
 		if err != nil {
 			ctx.Status(http.StatusInternalServerError)
 			return ctx.JSON(presenters.BadResponse(err))
 		}
+
 		ctx.Status(http.StatusOK)
 		return ctx.JSON(presenters.SuccessRequest(res))
 	}
