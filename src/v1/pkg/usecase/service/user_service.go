@@ -8,6 +8,8 @@ import (
 type UserService interface {
 	InsertUser(name, password string) (*entities.User, error)
 	GetUser(id uint) (*entities.User, error)
+	GetUserByName(name string) (*entities.User, error)
+	GetUserByEmail(email string) (*entities.User, error)
 	UpdateUser(user *entities.User) (*entities.User, error)
 	RemoveUser(id uint) error
 }
@@ -28,6 +30,14 @@ func (s *userService) InsertUser(name, password string) (*entities.User, error) 
 
 func (s *userService) GetUser(id uint) (*entities.User, error) {
 	return s.repository.ReadUser(id)
+}
+
+func (s *userService) GetUserByName(name string) (*entities.User, error) {
+	return s.repository.ReadUserByName(name)
+}
+
+func (s *userService) GetUserByEmail(email string) (*entities.User, error) {
+	return s.repository.ReadUserByEmail(email)
 }
 
 func (s *userService) UpdateUser(user *entities.User) (*entities.User, error) {

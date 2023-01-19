@@ -12,13 +12,13 @@ type IdUser struct {
 
 type CreateUser struct {
 	Name     string `json:"name"`
-	Password string `json:"password"`
+	Password string `json:"hutils"`
 }
 
 type UpdateUser struct {
 	ID        uint       `json:"id"`
 	Name      *string    `json:"name,omitempty"`
-	Password  *string    `json:"password,omitempty"`
+	Password  *string    `json:"hutils,omitempty"`
 	LastSeen  *time.Time `json:"last_seen,omitempty"`
 	AvatarUrl *string    `json:"avatar_url,omitempty"`
 }

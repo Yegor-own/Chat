@@ -10,6 +10,8 @@ import (
 type UserRepository interface {
 	CreateUser(name, password string) (*entities.User, error)
 	ReadUser(id uint) (*entities.User, error)
+	ReadUserByName(name string) (*entities.User, error)
+	ReadUserByEmail(email string) (*entities.User, error)
 	UpdateUser(user *entities.User) (*entities.User, error)
 	DeleteUser(id uint) error
 }
@@ -45,6 +47,35 @@ func (r *userRepository) ReadUser(id uint) (*entities.User, error) {
 
 	return &user, nil
 }
+
+func (r *userRepository) ReadUserByName(name string) (*entities.User, error) {
+	user := entities.User{Name: name}
+	res := r.db.First(&user, "name = ?", name)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	if reflect.ValueOf(user.ID).IsZero() {
+		return nil, errors.New("failed to read user")
+	}
+
+	return &user, nil
+}
+
+func (r *userRepository) ReadUserByEmail(email string) (*entities.User, error) {
+	user := entities.User{Email: email}
+	res := r.db.First(&user, "email = ?", email)
+
+	if res.Error != nil {
+		return nil, res.Error
+	}
+	if reflect.ValueOf(user.ID).IsZero() {
+		return nil, errors.New("failed to read user")
+	}
+
+	return &user, nil
+}
+
 func (r *userRepository) UpdateUser(user *entities.User) (*entities.User, error) {
 	res := r.db.Save(user)
 

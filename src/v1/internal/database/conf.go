@@ -3,7 +3,7 @@ package database
 func conf() string {
 	//host: "localhost"
 	//user: "cyber"
-	//password: "manul"
+	//hutils: "manul"
 	//dbname: "messenger"
 	//port: "5432"
 	//sslmode: "disable"
